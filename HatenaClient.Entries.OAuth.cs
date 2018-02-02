@@ -20,25 +20,6 @@ namespace HatenaLib
         }
 
         /// <summary>
-        /// [OAuth] エントリーフィードを取得
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="mode"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        public Task<IEnumerable<Entities.EntriesListItem>> GetEntriesAsync(Category category, EntriesListMode mode, long? offset = null)
-        {
-            if (category == Category.UserFeeds)
-            {
-                return GetUserEntriesAsync(offset);
-            }
-            else
-            {
-                return GetEntriesAsync(category, mode);
-            }
-        }
-
-        /// <summary>
         /// ブックマーク済みのエントリーを検索する
         /// </summary>
         /// <param name="queue"></param>
