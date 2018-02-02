@@ -65,10 +65,9 @@ namespace HatenaLib
         /// <returns></returns>
         private HttpClient MakeAuthorizedHttpClient(IEnumerable<KeyValuePair<string, string>> headers = null)
         {
-            var app = new ApplicationIdentity();
             var client = AsyncOAuth.OAuthUtility.CreateOAuthClient(
-                app.ConsumerKey,
-                app.ConsumerSecret,
+                Auth.App.ConsumerKey,
+                Auth.App.ConsumerSecret,
                 AccessToken,
                 headers);
             client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");

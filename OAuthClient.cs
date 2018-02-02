@@ -57,7 +57,7 @@ namespace HatenaLib
                 var authorizer = new OAuthAuthorizer(app.ConsumerKey, app.ConsumerSecret);
                 var requestToken = await GetRequestTokenAsync(authorizer);
                 var accessToken = await GetAccessTokenAsync(authorizer, requestToken, username, password);
-                var auth = new Entities.Auth(accessToken.Key, accessToken.Secret, username, password);
+                var auth = new Entities.Auth(app, accessToken.Key, accessToken.Secret, username, password);
                 return new HatenaClient(auth);
             }
             catch (Exception e)
