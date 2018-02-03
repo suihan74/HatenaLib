@@ -259,7 +259,7 @@ namespace HatenaLib
                 throw new ArgumentException("invalid tag", nameof(tag));
             }
 
-            var url = $"{BaseUrl}/{userName}/{tag}?mode=rss";
+            var url = $"{BaseUrl}/{userName}/rss?tag={tag}";
             if (offset is long of)
             {
                 url += $"&of={of * 20}";
