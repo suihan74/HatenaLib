@@ -37,5 +37,20 @@ namespace HatenaLib.Entities
                 }
             }
         }
+
+        /// <summary>
+        /// for JsonConvert
+        /// </summary>
+        public UserBase() { }
+
+        /// <summary>
+        /// copy constructor
+        /// </summary>
+        /// <param name="src"></param>
+        public UserBase(UserBase src)
+        {
+            _User = src._User;
+            _Name = src._Name;
+        }
     }
 }

@@ -43,6 +43,23 @@ namespace HatenaLib.Entities
                 }
             }
         }
+
+        /// <summary>
+        /// for JsonConvert
+        /// </summary>
+        public Star() { }
+
+        /// <summary>
+        /// copy constructor
+        /// </summary>
+        /// <param name="src"></param>
+        public Star(Star src)
+            : base(src)
+        {
+            Quote = src.Quote;
+            _Count = src._Count;
+            _Color = src._Color;
+        }
     }
 
     public class StarEntry
