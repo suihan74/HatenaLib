@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HatenaLib.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,5 +39,31 @@ namespace HatenaLib
 
             await PostAsync(apiUrl, data, GetCookieHeader());
         }
+
+        /// <summary>
+        /// [Basic] 最近ほかのユーザーから自分にスターが付けられたエントリーを取得する
+        /// </summary>
+        /// <returns></returns>
+        public async Task<StarEntry[]> GetStarEntriesReceivedAsync()
+        {
+            var apiUrl = $"{StarBaseUrl}/{Account.Name}/report.json?" + DateTime.Now.Ticks;
+
+            await CheckRk();
+            var res = await GetJsonObjectAsync<StarEntries>(apiUrl, GetCookieHeader());
+            return res.Entries;
+        }
+
+        /// <summary>
+        /// [Basic] 最近自分がスターを付けたエントリーを取得する
+        /// </summary>
+        /// <returns></returns>
+        public async Task<StarEntry[]> GetStarEntriesSentAsync()
+        {
+            var apiUrl = $"{StarBaseUrl}/{Account.Name}/stars.json?" + DateTime.Now.Ticks;
+
+            await CheckRk();
+            return await GetJsonObjectAsync<StarEntry[]>(apiUrl, GetCookieHeader());
+        }
+
     }
 }
