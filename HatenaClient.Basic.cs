@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using HatenaLib.Entities;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,6 +122,16 @@ namespace HatenaLib
 
             RksForStar = rks;
             return rks;
+        }
+
+        /// <summary>
+        /// 通知を取得
+        /// </summary>
+        /// <returns></returns>
+        public Task<NotifyResponse> GetNotifyAsync()
+        {
+            var apiUrl = $"https://www.hatena.ne.jp/notify/api/pull?{DateTime.Now.Ticks}";
+            return GetJsonObjectAsync<NotifyResponse>(apiUrl, GetCookieHeader());
         }
     }
 }
