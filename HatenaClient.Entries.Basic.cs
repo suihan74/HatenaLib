@@ -15,7 +15,7 @@ namespace HatenaLib
         public async Task<IEnumerable<Entities.EntriesListItem>> GetFavoriteUsersEntriesAsync()
         {
             var url = $"{BaseUrl}/{Auth.UserName}/favorite.rss";
-            return await GetEntriesImplAsync(url);
+            return await GetEntriesImplAsync(url, GetCookieHeader());
         }
 
         /// <summary>

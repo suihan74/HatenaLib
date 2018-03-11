@@ -24,7 +24,7 @@ namespace HatenaLib
 
         UserFeeds,
         Tags,
-        MyHotEntries,
+        [Obsolete] MyHotEntries,
         Favorites,
         Search
     }

@@ -83,7 +83,7 @@ namespace HatenaLib.Entities
         }
 
         [JsonIgnore]
-        public long? _TotalStars;
+        private long? _TotalStars;
     }
 
     public class StarEntries

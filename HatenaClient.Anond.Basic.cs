@@ -56,8 +56,9 @@ namespace HatenaLib
                 RkmForAnond = rkm;
                 SiForAnond = si;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
+                throw;
             }
         }
 
