@@ -128,10 +128,10 @@ namespace HatenaLib
         /// 通知を取得
         /// </summary>
         /// <returns></returns>
-        public Task<NotifyResponse> GetNotifyAsync()
+        public Task<NoticeResponse> GetNotifyAsync()
         {
             var apiUrl = $"https://www.hatena.ne.jp/notify/api/pull?{DateTime.Now.Ticks}";
-            return GetJsonObjectAsync<NotifyResponse>(apiUrl, GetCookieHeader());
+            return GetJsonObjectAsync<NoticeResponse>(apiUrl, GetCookieHeader());
         }
     }
 }

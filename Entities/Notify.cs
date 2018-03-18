@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HatenaLib.Entities
 {
-    public class NotifyObject
+    public class NoticeObject : UserBase
     {
         [JsonProperty("color")]
         private string _Color = null;
@@ -25,9 +25,6 @@ namespace HatenaLib.Entities
                 }
             }
         }
-
-        [JsonProperty("user")]
-        public string UserName { get; set; }
     }
 
     public class NotifyMetadata
@@ -36,7 +33,7 @@ namespace HatenaLib.Entities
         public string SubjectTitle { get; set; }
     }
 
-    public enum NotifyType
+    public enum NoticeType
     {
         Unknown,
 
@@ -46,7 +43,7 @@ namespace HatenaLib.Entities
         Star,
     }
 
-    public class Notify
+    public class Notice
     {
         [JsonProperty("created")]
         [JsonConverter(typeof(UnixDateTimeConverter))]
@@ -60,22 +57,22 @@ namespace HatenaLib.Entities
         public DateTime ModifiedAt { get; set; }
 
         [JsonProperty("object")]
-        public NotifyObject[] Objects { get; set; }
+        public NoticeObject[] Objects { get; set; }
 
         [JsonProperty("verb")]
         private string _Verb = null;
 
         [JsonIgnore]
-        public NotifyType Verb
+        public NoticeType Verb
         {
             get
             {
                 switch (_Verb)
                 {
-                    case "bookmark": return NotifyType.Bookmark;
-                    case "idcall": return NotifyType.IdCall;
-                    case "star": return NotifyType.Star;
-                    default: return NotifyType.Unknown;
+                    case "bookmark": return NoticeType.Bookmark;
+                    case "idcall": return NoticeType.IdCall;
+                    case "star": return NoticeType.Star;
+                    default: return NoticeType.Unknown;
                 }
             }
         }
@@ -87,7 +84,7 @@ namespace HatenaLib.Entities
         public string UserName { get; set; }
     }
 
-    public class NotifyResponse
+    public class NoticeResponse
     {
         [JsonProperty("status")]
         public string Status { get; set; }
@@ -97,6 +94,6 @@ namespace HatenaLib.Entities
         public DateTime LastSeen { get; set; }
 
         [JsonProperty("notices")]
-        public Notify[] notices { get; set; }
+        public Notice[] notices { get; set; }
     }
 }
