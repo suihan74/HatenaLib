@@ -225,7 +225,7 @@ namespace HatenaLib
         /// <param name="userName"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public static Task<IEnumerable<Entities.EntriesListItem>> GetUserEntriesAsync(string userName, long? offset = null)
+        public static Task<IEnumerable<Entities.EntriesListItem>> GetUserEntriesAsync(string userName, DateTime date = default(DateTime), long? offset = null)
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
@@ -233,10 +233,17 @@ namespace HatenaLib
             }
 
             var url = $"{BaseUrl}/{userName}/rss";
+
+            if (date != default(DateTime))
+            {
+                url += $"?date={date.ToString("yyyyMMdd")}";
+            }
+
             if (offset is long of)
             {
-                url += $"?of={of * 20}";
+                url += (date == default(DateTime) ? "?" : "&") + $"of={of * 20}";
             }
+
             return GetEntriesImplAsync(url);
         }
 

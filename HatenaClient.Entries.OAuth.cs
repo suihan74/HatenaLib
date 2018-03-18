@@ -14,9 +14,9 @@ namespace HatenaLib
         /// </summary>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public Task<IEnumerable<Entities.EntriesListItem>> GetUserEntriesAsync(long? offset = null)
+        public Task<IEnumerable<Entities.EntriesListItem>> GetUserEntriesAsync(DateTime date = default(DateTime), long? offset = null)
         {
-            return HatenaClient.GetUserEntriesAsync(Account.Name, offset);
+            return HatenaClient.GetUserEntriesAsync(Account.Name, date, offset);
         }
 
         /// <summary>
