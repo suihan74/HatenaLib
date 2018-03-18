@@ -153,5 +153,16 @@ namespace HatenaLib
             }
             throw new HttpRequestException("connection error");
         }
+
+        public async Task<TimelineResponse> GetTimelineAsync()
+        {
+            var apiUrl = $"http://n.hatena.ne.jp/timeline.json?reftime=-{DateTime.Now.Ticks},0";
+
+            using (var client = MakeAuthorizedHttpClient())
+            {
+                var json = await client.GetStringAsync(apiUrl);
+                return JsonConvert.DeserializeObject<TimelineResponse>(json);
+            }
+        }
     }
 }
