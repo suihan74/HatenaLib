@@ -16,6 +16,46 @@ namespace HatenaLib
         private string SiForAnond;
 
         /// <summary>
+        /// [Basic] 匿名ダイアリー用のRKを取得
+        /// </summary>
+        /// <param name="forceUpdating"></param>
+        /// <returns></returns>
+        public async Task<string> GetRkForAnondAsync(bool forceUpdating = false)
+        {
+            if (!string.IsNullOrEmpty(RkForAnond) && !forceUpdating) { return RkForAnond; }
+
+            try
+            {
+                await LoginAnonymousDiaryAsync();
+                return RkForAnond;
+            }
+            catch (HttpRequestException e)
+            {
+                throw new Exception("login to anond failed.", e);
+            }
+        }
+
+        /// <summary>
+        /// [Basic] 匿名ダイアリー用のSIを取得
+        /// </summary>
+        /// <param name="forceUpdating"></param>
+        /// <returns></returns>
+        public async Task<string> GetSiForAnondAsync(bool forceUpdating = false)
+        {
+            if (!string.IsNullOrEmpty(SiForAnond) && !forceUpdating) { return SiForAnond; }
+
+            try
+            {
+                await LoginAnonymousDiaryAsync();
+                return SiForAnond;
+            }
+            catch (HttpRequestException e)
+            {
+                throw new Exception("login to anond failed.", e);
+            }
+        }
+
+        /// <summary>
         /// [Basic] 匿名ダイアリーにログイン
         /// </summary>
         /// <returns></returns>

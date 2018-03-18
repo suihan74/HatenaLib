@@ -31,11 +31,11 @@ namespace HatenaLib
         /// <summary>
         /// Basic認証してrkを取得する
         /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
         /// <returns></returns>
-        private async Task GetRandomKeyAsync()
+        public async Task<string> GetRkAsync(bool forceUpdating = false)
         {
+            if (!string.IsNullOrEmpty(Rk) && !forceUpdating) { return Rk; }
+
             var url = "https://www.hatena.ne.jp/login";
             var client = MakeHttpClient();
 
@@ -59,18 +59,22 @@ namespace HatenaLib
                 throw new HttpRequestException("failed to authorize");
             }
 
-            // ユーザー情報を取得
-            var userApiUrl = $"{BaseUrl}/my.name";
-            client.DefaultRequestHeaders.Add("Cookie", $"rk={Rk}");
-            using (var response = await client.GetAsync(userApiUrl))
+            if (string.IsNullOrEmpty(Rkm))
             {
-                var json = await response.Content.ReadAsStringAsync();
-                var rks = JObject.Parse(json).Value<string>("rks");
-                var rkm = JObject.Parse(json).Value<string>("rkm");
+                var userApiUrl = $"{BaseUrl}/my.name";
+                client.DefaultRequestHeaders.Add("Cookie", $"rk={Rk}");
+                using (var response = await client.GetAsync(userApiUrl))
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var rks = JObject.Parse(json).Value<string>("rks");
+                    var rkm = JObject.Parse(json).Value<string>("rkm");
 
-                RksForBookmark = rks;
-                Rkm = rkm;
+                    RksForBookmark = rks;
+                    Rkm = rkm;
+                }
             }
+
+            return Rk;
         }
 
         /// <summary>
@@ -83,7 +87,7 @@ namespace HatenaLib
             {
                 try
                 {
-                    await GetRandomKeyAsync();
+                    await GetRkAsync();
                 }
                 catch (Exception e)
                 {
