@@ -66,17 +66,19 @@ namespace HatenaLib
             XNamespace ns = xml.Root.Attribute("xmlns").Value;
             XNamespace dc = xml.Root.Attribute(xmlns + "dc").Value;
             XNamespace hatena = xml.Root.Attribute(xmlns + "hatena").Value;
+            XNamespace content = xml.Root.Attribute(xmlns + "content").Value;
 
             var result = xml.Descendants(ns + "item")
                 .Select(item =>
                 {
                     return new Entities.EntriesListItem()
                     {
-                        Title = item.Element(ns + "title").Value,
-                        Description = item.Element(ns + "description").Value,
-                        Url = item.Element(ns + "link").Value,
-                        CreatedAt = DateTime.Parse(item.Element(dc + "date").Value),
                         BookmarkedCount = long.Parse(item.Element(hatena + "bookmarkcount").Value),
+                        CreatedAt = DateTime.Parse(item.Element(dc + "date").Value),
+                        Description = item.Element(ns + "description").Value,
+                        Encoded = item.Element(content + "encoded").Value,
+                        Title = item.Element(ns + "title").Value,
+                        Url = item.Element(ns + "link").Value,
                         UserName = item.Element(dc + "creator")?.Value ?? string.Empty,
                     };
                 })

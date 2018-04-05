@@ -98,6 +98,65 @@ namespace HatenaLib.Entities
 
         [JsonProperty("timestamp")]
         public DateTime CreatedAt { get; set; }
+
+        [JsonIgnore]
+        public string Encoded { get; set; }
+
+        [JsonIgnore]
+        private static Regex FaviconRegex = new Regex(@"http:\/\/cdn\-ak\.favicon\.st\-hatena\.com\/\?url\=[^""\s]+");
+
+        [JsonIgnore]
+        public string FaviconUrl
+        {
+            get
+            {
+                if (_FaviconUrl != null) { return _FaviconUrl; }
+                if (string.IsNullOrEmpty(Encoded))
+                {
+                    return _FaviconUrl = string.Empty;
+                }
+                var match = FaviconRegex.Match(Encoded);
+                if (match.Success)
+                {
+                    return _FaviconUrl = match.Value;
+                }
+                else
+                {
+                    return _FaviconUrl = string.Empty;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        private string _FaviconUrl = null;
+
+        [JsonIgnore]
+        private static Regex ThumbnailRegex = new Regex(@"https?:\/\/cdn\-ak\-scissors\.b\.st\-hatena\.com\/[^""\s]+");
+
+        [JsonIgnore]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (_ThumbnailUrl != null) { return _ThumbnailUrl; }
+                if (string.IsNullOrEmpty(Encoded))
+                {
+                    return _ThumbnailUrl = string.Empty;
+                }
+                var match = ThumbnailRegex.Match(Encoded);
+                if (match.Success)
+                {
+                    return _ThumbnailUrl = match.Value;
+                }
+                else
+                {
+                    return _ThumbnailUrl = string.Empty;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        private string _ThumbnailUrl = null;
    }
 }
 
