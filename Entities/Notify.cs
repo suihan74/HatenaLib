@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace HatenaLib.Entities
@@ -82,6 +83,72 @@ namespace HatenaLib.Entities
 
         [JsonProperty("user_name")]
         public string UserName { get; set; }
+
+
+        [JsonIgnore]
+        private string _UserImageUrl = null;
+
+        [JsonIgnore]
+        public string UserImageUrl
+        {
+            get => _UserImageUrl ?? (_UserImageUrl = Objects?.LastOrDefault()?.UserImageUrl ?? string.Empty);
+        }
+
+        [JsonIgnore]
+        private string _Message = null;
+
+        [JsonIgnore]
+        public string Message
+        {
+            get
+            {
+                if (_Message != null)
+                {
+                    return _Message;
+                }
+
+                var users = Objects
+                    .Reverse()
+                    .DistinctBy(n => n.UserName)
+                    .ToArray();
+                var tops = users.Take(3);
+                var last = tops.Last();
+
+                var msg = new StringBuilder();
+                foreach (var u in tops)
+                {
+                    msg.Append(u.UserName);
+                    msg.Append("さん");
+                    if (u != last)
+                    {
+                        msg.Append(", ");
+                    }
+                }
+
+                var total = users.Count();
+                if (total > 3)
+                {
+                    msg.Append($", ほか{total - 3}人");
+                }
+
+                switch (Verb)
+                {
+                    case NoticeType.Bookmark:
+                        msg.Append("が, あなたのエントリーをブックマークしました");
+                        break;
+
+                    case NoticeType.IdCall:
+                        msg.Append("から, IDコールがありました");
+                        break;
+
+                    case NoticeType.Star:
+                        msg.Append("が, あなたのブックマークにスターをつけました");
+                        break;
+                }
+
+                return (_Message = msg.ToString());
+            }
+        }
     }
 
     public class NoticeResponse
@@ -94,6 +161,6 @@ namespace HatenaLib.Entities
         public DateTime LastSeen { get; set; }
 
         [JsonProperty("notices")]
-        public Notice[] notices { get; set; }
+        public Notice[] Notices { get; set; }
     }
 }
