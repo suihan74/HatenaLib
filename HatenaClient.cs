@@ -19,11 +19,11 @@ namespace HatenaLib
     public partial class HatenaClient : BaseHttpClient
     {
         /// <summary>
-        /// はてブ
+        /// はてブ - http://b.hatena.ne.jp
         /// </summary>
         public static readonly string BaseUrl = "http://b.hatena.ne.jp";
         /// <summary>
-        /// 要OAuth認証はてブ機能
+        /// 要OAuth認証はてブ機能 - http://api.b.hatena.ne.jp/1
         /// </summary>
         public static readonly string ApiBaseUrl = "http://api.b.hatena.ne.jp/1";
 
