@@ -88,7 +88,10 @@ namespace HatenaLib.Entities
         private static Regex DomainParser = new Regex(@"https?:\/\/(?<domain>[^\/]+)\/?");
 
         [JsonIgnore]
-        public string Domain { get => DomainParser.Match(Url ?? string.Empty)?.Groups["domain"]?.Value ?? string.Empty; }
+        private string _Domain = null;
+
+        [JsonIgnore]
+        public string Domain { get => _Domain ?? (_Domain = DomainParser.Match(Url ?? string.Empty)?.Groups["domain"]?.Value) ?? string.Empty; }
 
         [JsonProperty("count")]
         public long BookmarkedCount { get; set; }
