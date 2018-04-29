@@ -13,7 +13,11 @@ namespace HatenaLib.Entities
         public string UserName
         {
             get => _User ?? _Name;
-            set => _User = value;
+            set
+            {
+                _User = value;
+                _UserImageUrl = null;
+            }
         }
 
         [JsonProperty("user")]
@@ -23,19 +27,12 @@ namespace HatenaLib.Entities
         private string _Name { get; set; }
 
         [JsonIgnore]
+        private string _UserImageUrl;
+
+        [JsonIgnore]
         public string UserImageUrl
         {
-            get
-            {
-                if (string.IsNullOrEmpty(UserName))
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return $"http://cdn1.www.st-hatena.com/users/{(UserName.Substring(0, 2))}/{UserName}/profile.gif";
-                }
-            }
+            get => _UserImageUrl ?? (_UserImageUrl = UserNameToImageUrl(UserName));
         }
 
         /// <summary>
@@ -51,6 +48,24 @@ namespace HatenaLib.Entities
         {
             _User = src._User;
             _Name = src._Name;
+            _UserImageUrl = src._UserImageUrl;
+        }
+
+        /// <summary>
+        /// ユーザー名からアイコンURLを取得する
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public static string UserNameToImageUrl(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return $"http://cdn1.www.st-hatena.com/users/{(userName.Substring(0, 2))}/{userName}/profile.gif";
+            }
         }
     }
 }
