@@ -37,7 +37,7 @@ namespace HatenaLib
         /// <returns></returns>
         public Task<IEnumerable<Entities.Tag>> GetUserTagsAsync()
         {
-            if (string.IsNullOrEmpty(Auth?.UserName))
+            if (string.IsNullOrEmpty(Auth.UserName))
             {
                 throw new InvalidOperationException("failed to get tags");
             }
@@ -52,7 +52,7 @@ namespace HatenaLib
         /// <returns></returns>
         public Task<IEnumerable<Entities.EntriesListItem>> GetUserTaggedEntriesAsync(string tag, long? offset = null)
         {
-            if (string.IsNullOrEmpty(Auth?.UserName))
+            if (string.IsNullOrEmpty(Auth.UserName))
             {
                 throw new InvalidOperationException("failed to get tags");
             }

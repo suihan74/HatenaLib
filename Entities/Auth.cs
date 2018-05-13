@@ -4,19 +4,17 @@ using System.Text;
 
 namespace HatenaLib.Entities
 {
-    public class Auth
+    /// <summary>
+    /// ユーザー認証情報
+    /// </summary>
+    public struct Auth
     {
-        public string Token { get; set; }
-        public string TokenSecret { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public string Token { get; }
+        public string TokenSecret { get; }
+        public string UserName { get; }
+        public string Password { get; }
 
-        public ApplicationIdentity App { get; set; }
-
-        // for JsonConvert
-        public Auth()
-        {
-        }
+        public ApplicationIdentity App { get; }
 
         public Auth(ApplicationIdentity app, string token, string tokenSecret, string username, string password)
         {

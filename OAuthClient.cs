@@ -13,12 +13,18 @@ using System.Threading.Tasks;
 namespace HatenaLib
 {
     /// <summary>
-    /// コンシューマキー/シークレット
+    /// アプリケーション認証情報
     /// </summary>
-    public class ApplicationIdentity
+    public struct ApplicationIdentity
     {
-        public string ConsumerKey;
-        public string ConsumerSecret;
+        public string ConsumerKey { get; }
+        public string ConsumerSecret { get; }
+
+        public ApplicationIdentity(string consumerKey, string consumerSecret)
+        {
+            ConsumerKey = consumerKey;
+            ConsumerSecret = consumerSecret;
+        }
     }
 
     /// <summary>
