@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -316,6 +317,36 @@ namespace HatenaLib
             // キャッシュ回避
             apiUrl += "&" + DateTime.Now.Ticks;
             return GetJsonObjectAsync<Entities.Entry>(apiUrl);
+        }
+
+        /// <summary>
+        /// エントリーIDから元のページのURLを取得
+        /// </summary>
+        /// <param name="eid"></param>
+        /// <returns></returns>
+        public static async Task<string> GetEntryUrlAsync(long eid)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Head, $"{BaseUrl}/entry/{eid}");
+
+                using (var client = MakeHttpClient())
+                using (var response = await client.SendAsync(request))
+                {
+                    var commentsPageUrl = response.RequestMessage?.RequestUri?.AbsoluteUri 
+                        ?? throw new HttpRequestException($"failed to get the entry url from eid: {eid}");
+
+                    return GetEntryPageUrl(commentsPageUrl);
+                }
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw new HttpRequestException($"failed to get the entry url from eid: {eid}");
+            }
         }
     }
 }

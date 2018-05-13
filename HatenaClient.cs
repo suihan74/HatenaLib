@@ -125,6 +125,73 @@ namespace HatenaLib
             return "http://b.hatena.ne.jp/entry/" + (entryUri.Scheme == "https" ? "s/" : "") + srcUrl;
         }
 
+        /// <summary>
+        /// ブコメページURLからエントリーURLを取得
+        /// </summary>
+        /// <param name="commentsPageUrl"></param>
+        /// <returns></returns>
+        public static string GetEntryPageUrl(string commentsPageUrl)
+        {
+            try
+            {
+                return GetEntryPageUrl(new Uri(commentsPageUrl));
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException($"invalid url: {commentsPageUrl}", nameof(commentsPageUrl));
+            }
+        }
+
+        /// <summary>
+        /// ブコメページURLからエントリーURLを取得
+        /// </summary>
+        /// <param name="bookmarkCommentPageUrl"></param>
+        /// <returns></returns>
+        public static string GetEntryPageUrl(Uri commentsPageUri)
+        {
+            var hatenaBaseUrl = "http://b.hatena.ne.jp/entry/";
+            if (!commentsPageUri.AbsoluteUri.StartsWith(hatenaBaseUrl))
+            {
+                throw new ArgumentException("URL is not a comment page: " + commentsPageUri.AbsoluteUri, nameof(commentsPageUri));
+            }
+
+            var destUrl = commentsPageUri.AbsoluteUri.Replace(hatenaBaseUrl, "");
+            if (destUrl.StartsWith("s/"))
+            {
+                destUrl = "https://" + destUrl.Substring(2);
+            }
+            else
+            {
+                destUrl = "http://" + destUrl;
+            }
+
+            return destUrl;
+        }
+
+        /// <summary>
+        /// ブコメURLからエントリーIDを抽出
+        /// （ブコメURL例: "http://b.hatena.ne.jp/suihan74/20180513#bookmark-363996620"）
+        /// </summary>
+        /// <param name="bookmarkUrl"></param>
+        /// <returns></returns>
+        public static long GetEntryId(string bookmarkUrl)
+        {
+            var regex = new Regex($@"http:\/\/b\.hatena\.ne\.jp\/(?<username>\w+)\/(?<date>\d+)\#bookmark\-(?<eid>\d+)$");
+            var match = regex.Match(bookmarkUrl);
+            var eidGroup = match.Groups["eid"];
+
+            if (eidGroup.Success && long.TryParse(eidGroup.Value, out var eid))
+            {
+                return eid;
+            }
+
+            throw new ArgumentException("invalid url: " + bookmarkUrl);
+        }
+
         #endregion
 
         /// <summary>
