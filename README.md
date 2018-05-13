@@ -8,10 +8,8 @@ This library contains AsyncOAuth (https://github.com/neuecc/AsyncOAuth).
 ## First step
 
 ~~~C#
-var app = new HatenaLib.ApplicationIdentity
-{
-    ConsumerKey = hogehoge,
-    ConsumerSecret = fugafuga,
-};
+var app = new HatenaLib.ApplicationIdentity(
+    consumerKey: hogehoge,
+    consumerSecret: fugafuga);
 var client = await HatenaLib.OAuthClient.AuthorizeAsync(app, username, password);
 ~~~
