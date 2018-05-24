@@ -28,9 +28,9 @@ namespace HatenaLib
             bool postEvernote = false,
             bool sendMail = false)
         {
-            var apiUrl = HatenaClient.ApiBaseUrl + "/my/bookmark";
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) { throw new ArgumentException("invalid url: " + url, nameof(url)); }
 
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) { throw new ArgumentNullException("url"); }
+            var apiUrl = HatenaClient.ApiBaseUrl + "/my/bookmark";
             if (comment == null) { comment = string.Empty; }
 
             string BoolToParam(bool b) => b ? "1" : "0";
@@ -64,7 +64,7 @@ namespace HatenaLib
                 }
             }
 
-            throw new HttpRequestException("bookmarking failure");
+            throw new HttpRequestException("bookmark failed. entry url: " + url);
         }
 
         /// <summary>
@@ -74,12 +74,10 @@ namespace HatenaLib
         /// <returns></returns>
         public async Task<Entities.Bookmark> GetBookmarkAsync(string url)
         {
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) { throw new ArgumentNullException("url: " + url); }
-
-            var apiUrl = ApiBaseUrl + "/my/bookmark" + "?url=" + url;
-
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) { throw new ArgumentException("invalid url: " + url, nameof(url)); }
             try
             {
+                var apiUrl = ApiBaseUrl + "/my/bookmark" + "?url=" + url;
                 using (var client = MakeAuthorizedHttpClient())
                 using (var response = await client.GetAsync(apiUrl))
                 {
@@ -95,7 +93,7 @@ namespace HatenaLib
                 throw;
             }
 
-            throw new InvalidOperationException("has not been bookmarked yet");
+            throw new InvalidOperationException("the page has not been bookmarked yet. url: " + url);
         }
 
         /// <summary>
@@ -105,9 +103,9 @@ namespace HatenaLib
         /// <returns></returns>
         public async Task<bool> DeleteBookmarkAsync(string url)
         {
-            var apiUrl = ApiBaseUrl + "/my/bookmark";
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) { throw new ArgumentException("invalid url: " + url, nameof(url)); }
 
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) { throw new ArgumentNullException("url"); }
+            var apiUrl = ApiBaseUrl + "/my/bookmark";
             var data = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("url", url) });
 
             var req = new HttpRequestMessage(HttpMethod.Delete, apiUrl) { Content = data };
@@ -123,7 +121,7 @@ namespace HatenaLib
                         return false;
 
                     default:
-                        throw new HttpRequestException("invalid deletion");
+                        throw new HttpRequestException("invalid deletion. url: " + url);
                 }
             }
         }

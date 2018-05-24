@@ -14,6 +14,10 @@ namespace HatenaLib
         /// <returns></returns>
         public async Task<IEnumerable<Entities.EntriesListItem>> GetFavoriteUsersEntriesAsync()
         {
+            if (string.IsNullOrEmpty(Auth.UserName))
+            {
+                throw new InvalidOperationException("failed to get favorites. user: " + Auth.UserName);
+            }
             var url = $"{BaseUrl}/{Auth.UserName}/favorite.rss";
             return await GetEntriesImplAsync(url, GetCookieHeader());
         }
@@ -25,6 +29,10 @@ namespace HatenaLib
         /// <returns></returns>
         public async Task<IEnumerable<Entities.EntriesListItem>> GetMyHotEntriesAsync()
         {
+            if (string.IsNullOrEmpty(Auth.UserName))
+            {
+                throw new InvalidOperationException("failed to get hotentries. user: " + Auth.UserName);
+            }
             await CheckRk();
             var url = $"{BaseUrl}/{Auth.UserName}/hotentry.rss";
             return await GetEntriesImplAsync(url, GetCookieHeader());
@@ -39,7 +47,7 @@ namespace HatenaLib
         {
             if (string.IsNullOrEmpty(Auth.UserName))
             {
-                throw new InvalidOperationException("failed to get tags");
+                throw new InvalidOperationException("failed to get tags. user: " + Auth.UserName);
             }
             return GetUserTagsAsync(Auth.UserName);
         }
@@ -54,7 +62,7 @@ namespace HatenaLib
         {
             if (string.IsNullOrEmpty(Auth.UserName))
             {
-                throw new InvalidOperationException("failed to get tags");
+                throw new InvalidOperationException("failed to get tags. user: " + Auth.UserName);
             }
             return GetUserTaggedEntriesAsync(Auth.UserName, tag, offset);
         }

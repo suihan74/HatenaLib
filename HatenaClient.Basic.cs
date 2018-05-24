@@ -56,7 +56,7 @@ namespace HatenaLib
 
             if (Rk == null)
             {
-                throw new HttpRequestException("failed to authorize");
+                throw new HttpRequestException("authentication failed");
             }
 
             if (string.IsNullOrEmpty(Rkm))
@@ -91,7 +91,7 @@ namespace HatenaLib
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidOperationException("randomkey has been not initialized", e);
+                    throw new InvalidOperationException("RK has been not initialized", e);
                 }
             }
         }
