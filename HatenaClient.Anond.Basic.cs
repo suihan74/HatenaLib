@@ -74,7 +74,7 @@ namespace HatenaLib
                     {"key", Auth.UserName},
                     {"password", Auth.Password}
                 });
-                var client = MakeHttpClient();
+                var client = MakeHttpClient(loginUrl);
                 using (var response = await client.PostAsync(loginUrl, userData))
                 {
                     var rkRegex = new Regex(@"rk=(?<rk>\S+);");

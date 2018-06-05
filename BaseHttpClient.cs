@@ -14,18 +14,28 @@ namespace HatenaLib
 {
     public class BaseHttpClient
     {
-        public static HttpClient MakeHttpClient(Dictionary<string, string> headers = null)
+        private static readonly Dictionary<string, HttpClient> HttpClientPool = new Dictionary<string, HttpClient>();
+        private static HttpClient Client;
+
+        public static HttpClient MakeHttpClient(string url)
         {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
-            if (headers != null)
+            if (Client == null)
             {
-                foreach (var pair in headers)
-                {
-                    client.DefaultRequestHeaders.Add(pair.Key, pair.Value);
-                }
+                Client = new HttpClient();
+                Client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
             }
-            return client;
+
+            // コネクションを定期的に更新してDNS変更を反映する
+            try
+            {
+                var uri = new Uri(url);
+                var sp = ServicePointManager.FindServicePoint(uri);
+                sp.ConnectionLeaseTimeout = 60 * 1000;
+            }
+            catch (Exception)
+            {}
+
+            return Client;
         }
 
         #region GET
@@ -34,18 +44,30 @@ namespace HatenaLib
         {
             return Task.Run(async () =>
             {
-                using (var client = MakeHttpClient(headers))
+                try
                 {
-                    var response = await client.GetAsync(url);
-                    if (response.IsSuccessStatusCode)
+                    var client = MakeHttpClient(url);
+                    var req = new HttpRequestMessage(HttpMethod.Get, url);
+                    if (headers != null)
+                    {
+                        foreach (var pair in headers)
+                        {
+                            req.Headers.TryAddWithoutValidation(pair.Key, pair.Value);
+                        }
+                    }
+
+                    var response = await client.SendAsync(req);
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
                         return response.Content;
                     }
-                    else
-                    {
-                        throw new HttpRequestException();
-                    }
                 }
+                catch (Exception e)
+                {
+                    throw new HttpRequestException("GET request failed. URL: " + url, e);
+                }
+
+                throw new HttpRequestException("GET request failed. URL: " + url);
             });
         }
 
@@ -84,11 +106,21 @@ namespace HatenaLib
         {
             return Task.Run(async () =>
             {
-                using (var client = MakeHttpClient(headers))
+                var client = MakeHttpClient(url);
+                var req = new HttpRequestMessage(HttpMethod.Post, url)
                 {
-                    var response = await client.PostAsync(url, new FormUrlEncodedContent(contents));
-                    return response.Content;
+                    Content = new FormUrlEncodedContent(contents)
+                };
+                if (headers != null)
+                {
+                    foreach (var pair in headers)
+                    {
+                        req.Headers.TryAddWithoutValidation(pair.Key, pair.Value);
+                    }
                 }
+
+                var response = await client.SendAsync(req);
+                return response.Content;
             });
         }
 
@@ -100,11 +132,17 @@ namespace HatenaLib
         {
             return Task.Run(async () =>
             {
-                using (var client = MakeHttpClient(headers))
+                var client = MakeHttpClient(req.RequestUri.AbsoluteUri);
+                if (headers != null)
                 {
-                    var response = await client.SendAsync(req);
-                    return response.Content;
+                    foreach (var pair in headers)
+                    {
+                        req.Headers.TryAddWithoutValidation(pair.Key, pair.Value);
+                    }
                 }
+
+                var response = await client.SendAsync(req);
+                return response.Content;
             });
         }
 

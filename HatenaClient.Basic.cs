@@ -37,7 +37,7 @@ namespace HatenaLib
             if (!string.IsNullOrEmpty(Rk) && !forceUpdating) { return Rk; }
 
             var url = "https://www.hatena.ne.jp/login";
-            var client = MakeHttpClient();
+            var client = MakeHttpClient(url);
 
             var data = new FormUrlEncodedContent(new Dictionary<string, string>
             {

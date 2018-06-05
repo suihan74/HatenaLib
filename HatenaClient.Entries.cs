@@ -328,10 +328,11 @@ namespace HatenaLib
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Head, $"{BaseUrl}/entry/{eid}");
+                var url = $"{BaseUrl}/entry/{eid}";
 
-                using (var client = MakeHttpClient())
-                using (var response = await client.SendAsync(request))
+                var client = MakeHttpClient(url);
+
+                using (var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, url)))
                 {
                     var commentsPageUrl = response.RequestMessage?.RequestUri?.AbsoluteUri 
                         ?? throw new HttpRequestException($"failed to get the entry url from eid: {eid}");
