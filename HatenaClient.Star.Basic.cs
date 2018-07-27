@@ -1,6 +1,7 @@
 ﻿using HatenaLib.Entities;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,5 +66,26 @@ namespace HatenaLib
             return await GetJsonObjectAsync<StarEntry[]>(apiUrl, GetCookieHeader());
         }
 
+        /// <summary>
+        /// [Basic] 自分が所持しているカラースター数を取得する
+        /// </summary>
+        /// <returns></returns>
+        public async Task<UserColorStarsCount> GetUserColorStarsCountAsync()
+        {
+            var url = "https://s.hatena.ne.jp/api/v0/me/colorstars";
+            await CheckRk();
+            var headers = GetCookieHeader();
+            headers.Add("X-Internal-API-Key", "wvlYJXSGDMY161Bbw4TEf8unWl4pDLLB1gy7PGcA");
+            headers.Add("X-Internal-API-RK", Rk);
+            var response = await GetJsonObjectAsync<UserColorStarsCountResponse>(url, headers);
+            if (response.Success)
+            {
+                return response.Result["counts"];
+            }
+            else
+            {
+                throw new HttpRequestException("cannot access to StarAPI: message > " + response.Message);
+            }
+        }
     }
 }
