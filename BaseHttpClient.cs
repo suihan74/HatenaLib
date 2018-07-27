@@ -120,6 +120,11 @@ namespace HatenaLib
                 }
 
                 var response = await client.SendAsync(req);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException("failed to POST. StatusCode: " + response.StatusCode);
+                }
+
                 return response.Content;
             });
         }

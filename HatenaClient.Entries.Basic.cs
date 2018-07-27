@@ -23,10 +23,11 @@ namespace HatenaLib
         }
 
         /// <summary>
-        /// [Basic] マイホットエントリーを取得する
+        /// [配信終了][Basic] マイホットエントリーを取得する
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
+        [Obsolete]
         public async Task<IEnumerable<Entities.EntriesListItem>> GetMyHotEntriesAsync()
         {
             if (string.IsNullOrEmpty(Auth.UserName))

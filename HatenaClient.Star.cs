@@ -1,7 +1,10 @@
-﻿using System;
+﻿using HatenaLib.Entities;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +13,7 @@ namespace HatenaLib
     public partial class HatenaClient
     {
         /// <summary>
-        /// はてなスター
+        /// はてなスター - http://s.hatena.ne.jp
         /// </summary>
         public static readonly string StarBaseUrl = "http://s.hatena.ne.jp";
 
