@@ -23,6 +23,7 @@ namespace HatenaLib.Utilities
                 case "red": return StarColor.Red;
                 case "green": return StarColor.Green;
                 case "blue": return StarColor.Blue;
+                case "purple": return StarColor.Purple;
                 default: return StarColor.Yellow;
             }
         }
@@ -37,6 +38,7 @@ namespace HatenaLib.Utilities
                     case StarColor.Red: str = "red"; break;
                     case StarColor.Green: str = "green"; break;
                     case StarColor.Blue: str = "blue"; break;
+                    case StarColor.Purple: str = "purple"; break;
                     default: str = "yellow"; break;
                 }
                 writer.WriteValue(str);

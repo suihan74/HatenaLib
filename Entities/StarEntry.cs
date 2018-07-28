@@ -13,7 +13,8 @@ namespace HatenaLib.Entities
         Yellow,
         Red,
         Green,
-        Blue
+        Blue,
+        Purple,
     }
 
     public class Star : UserBase
